@@ -4,10 +4,9 @@ import { useEffect } from 'react';
 
 const modalRoot = document.querySelector('#modal-root');
 
-export default function Modal({ onClose, largeImageUrl }) {
+export default function Modal({ toggleModal, largeImageUrl }) {
   const closeModal = e => {
-    if (e.code === 'Escape') onClose();
-    if (e.target === e.currentTarget) onClose();
+    if (e.code === 'Escape' || e.target === e.currentTarget) toggleModal();
   };
 
   useEffect(() => {

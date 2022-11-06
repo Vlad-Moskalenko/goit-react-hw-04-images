@@ -21,23 +21,23 @@ export default function ImageGallery({ searchQuery }) {
     setShowModal(!showModal);
   };
 
+  const onRequest = async (searchQuery, page) => {
+    setStatus('pending');
+    try {
+      const newImages = await fetchGetImage(searchQuery, page);
+      setImages([...newImages]);
+      setStatus('resolved');
+    } catch {
+      toast.error(`Didn't find ${searchQuery}`);
+      setStatus('rejected');
+    }
+  };
+
   useEffect(() => {
     if (!searchQuery) return;
 
-    setStatus('pending');
     setPage(1);
     setImages([]);
-
-    const onRequest = async searchQuery => {
-      try {
-        const newImages = await fetchGetImage(searchQuery);
-        setImages([...newImages]);
-        setStatus('resolved');
-      } catch {
-        toast.error(`Didn't find ${searchQuery}`);
-        setStatus('rejected');
-      }
-    };
 
     onRequest(searchQuery);
   }, [searchQuery]);
@@ -60,7 +60,7 @@ export default function ImageGallery({ searchQuery }) {
         </ul>
         <Button onClick={() => setPage(page + 1)} />
         {showModal && (
-          <Modal onClose={toggleModal} largeImageUrl={currentModalImage} />
+          <Modal toggleModal={toggleModal} largeImageUrl={currentModalImage} />
         )}
       </>
     );
