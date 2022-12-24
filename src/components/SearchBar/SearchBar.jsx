@@ -1,41 +1,25 @@
-import './search-bar.css';
-import { useState } from 'react';
+import css from './SearchBar.module.css';
 import { FcSearch } from 'react-icons/fc';
-import { toast } from 'react-toastify';
+import PropTypes from 'prop-types';
 
-export default function SearchBar({ onSubmit }) {
-  const [searchQuery, setSearchQuery] = useState('');
+export const SearchBar = ({ onSubmit }) => (
+  <header className={css.searchBar}>
+    <form className={css.searchForm} onSubmit={onSubmit}>
+      <button type="submit" className={css.searchFormButton}>
+        <FcSearch style={{ width: 30, height: 30 }} />
+      </button>
+      <input
+        className={css.searchFormInput}
+        type="text"
+        autoComplete="off"
+        name="query"
+        autoFocus
+        placeholder="Search images and photos"
+      />
+    </form>
+  </header>
+);
 
-  const onSearchQueryChange = e => setSearchQuery(e.target.value.toLowerCase());
-
-  const onFormSubmit = e => {
-    e.preventDefault();
-
-    if (searchQuery.trim() === '') {
-      return toast.error('Search query is empty');
-    }
-
-    onSubmit(searchQuery);
-  };
-
-  return (
-    <header className="searchBar">
-      <form className="searchForm" onSubmit={onFormSubmit}>
-        <button type="submit" className="searchForm-button">
-          <FcSearch style={{ width: 30, height: 30 }} />
-        </button>
-
-        <input
-          onChange={onSearchQueryChange}
-          className="searchForm-input"
-          value={searchQuery}
-          name="query"
-          type="text"
-          autoComplete="off"
-          autoFocus
-          placeholder="Search images and photos"
-        />
-      </form>
-    </header>
-  );
-}
+SearchBar.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+};
