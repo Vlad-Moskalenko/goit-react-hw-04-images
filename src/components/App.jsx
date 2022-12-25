@@ -69,11 +69,11 @@ export const App = () => {
     <div className="App">
       <SearchBar onSubmit={onSearchSubmit} />
       {images.length > 0 && (
-        <ImageGallery images={images} onClick={onToggleModal} />
+        <ImageGallery images={images} onToggleModal={onToggleModal} />
       )}
       {error && <Error title={error} />}
       {currentModalImage && (
-        <Modal image={currentModalImage} onCloseModal={onToggleModal} />
+        <Modal image={currentModalImage} onToggleModal={onToggleModal} />
       )}
       {isLoading && <Loader />}
       {images.length < totalHits && <Button onClick={onClickLoadMore} />}

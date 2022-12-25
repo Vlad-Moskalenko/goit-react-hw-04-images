@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import PropTypes from 'prop-types';
 
@@ -6,16 +6,19 @@ import css from './Modal.module.css';
 
 const modalRoot = document.querySelector('#modal-root');
 
-export const Modal = ({ image, onCloseModal }) => {
+export const Modal = ({ image, onToggleModal }) => {
+  const closeModal = useCallback(
+    e => {
+      if (e.code === 'Escape' || e.target === e.currentTarget) onToggleModal();
+    },
+    [onToggleModal]
+  );
+
   useEffect(() => {
     window.addEventListener('keydown', closeModal);
 
     return () => window.removeEventListener('keydown', closeModal);
-  });
-
-  const closeModal = e => {
-    if (e.code === 'Escape' || e.target === e.currentTarget) onCloseModal();
-  };
+  }, [closeModal]);
 
   return createPortal(
     <div className={css.overlay} onClick={closeModal}>
@@ -29,5 +32,5 @@ export const Modal = ({ image, onCloseModal }) => {
 
 Modal.propTypes = {
   image: PropTypes.string.isRequired,
-  onCloseModal: PropTypes.func.isRequired,
+  onToggleModal: PropTypes.func.isRequired,
 };
